@@ -106,7 +106,7 @@ export default class Results extends React.Component {
     }
 
     return (
-      <main className="animate-in main-stack">
+      <main className="animate-in stack main-stack">
         <div className="split">
           <h1>Results</h1>
         </div>
