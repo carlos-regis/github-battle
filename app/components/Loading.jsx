@@ -15,15 +15,15 @@ class Delayed extends React.Component {
         show: false,
     };
 
-    componentDidMount = () => {
+    componentDidMount() {
         this.timeout = window.setTimeout(() => {
             this.setState({ show: true });
         }, this.props.wait);
-    };
+    }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         window.clearTimeout(this.timeout);
-    };
+    }
 
     render() {
         return this.state.show === true ? this.props.children : null;
