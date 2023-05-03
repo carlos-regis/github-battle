@@ -138,11 +138,6 @@ export default class Battle extends React.Component {
                             search: `?playerOne=${playerOne}&playerTwo=${playerTwo}`,
                         }}
                         className={`btn primary ${disabled ? 'disabled' : ''}`}
-                        onClick={() => {
-                            this.setState({
-                                battle: true,
-                            });
-                        }}
                     >
                         Battle
                     </Link>
