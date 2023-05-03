@@ -7,7 +7,7 @@ const container = {
     display: 'flex',
 };
 
-export default function Tooltip({ children, element }) {
+function Tooltip({ children, element }) {
     return (
         <Hover>
             {(hovering) => {
@@ -26,3 +26,5 @@ Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     element: PropTypes.node.isRequired,
 };
+
+export default Tooltip;
