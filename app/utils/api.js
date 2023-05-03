@@ -1,15 +1,15 @@
-export function fetchPopularRepos(language) {
+export async function fetchPopularRepos(language) {
   const endpoint = window.encodeURI(
     `https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`,
   );
-  return fetch(endpoint)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.items) {
-        throw new Error(data.message);
-      }
-      return data.items;
-    });
+
+  const res = await fetch(endpoint);
+  const data = await res.json();
+
+  if (!data.items) {
+    throw new Error(data.message);
+  }
+  return data.items;
 }
 
 function getErrorMsg(message, username) {
@@ -20,28 +20,24 @@ function getErrorMsg(message, username) {
   return message;
 }
 
-function getProfile(username) {
-  return fetch(`https://api.github.com/users/${username}`)
-    .then((res) => res.json())
-    .then((profile) => {
-      if (profile.message) {
-        throw new Error(getErrorMsg(profile.message, username));
-      }
-
-      return profile;
-    });
+async function getProfile(username) {
+  const res = await fetch(`https://api.github.com/users/${username}`);
+  const profile = await res.json();
+  if (profile.message) {
+    throw new Error(getErrorMsg(profile.message, username));
+  }
+  return profile;
 }
 
-function getRepos(username) {
-  return fetch(`https://api.github.com/users/${username}/repos?&per_page=100`)
-    .then((res) => res.json())
-    .then((repos) => {
-      if (repos.message) {
-        throw new Error(getErrorMsg(repos.message, username));
-      }
-
-      return repos;
-    });
+async function getRepos(username) {
+  const res = await fetch(
+    `https://api.github.com/users/${username}/repos?&per_page=100`,
+  );
+  const repos = await res.json();
+  if (repos.message) {
+    throw new Error(getErrorMsg(repos.message, username));
+  }
+  return repos;
 }
 
 function getStarCount(repos) {
@@ -54,21 +50,25 @@ function calculateScore(followers, repos) {
   return followers * 3 + getStarCount(repos);
 }
 
-function getUserData(player) {
-  return Promise.all([getProfile(player), getRepos(player)]).then(
-    ([profile, repos]) => ({
-      profile,
-      score: calculateScore(profile.followers, repos),
-    }),
-  );
+async function getUserData(player) {
+  const [profile, repos] = await Promise.all([
+    getProfile(player),
+    getRepos(player),
+  ]);
+  return {
+    profile,
+    score: calculateScore(profile.followers, repos),
+  };
 }
 
 function sortPlayers(players) {
   return players.sort((a, b) => b.score - a.score);
 }
 
-export function battle(players) {
-  return Promise.all([getUserData(players[0]), getUserData(players[1])]).then(
-    sortPlayers,
-  );
+export async function battle(players) {
+  const players_1 = await Promise.all([
+    getUserData(players[0]),
+    getUserData(players[1]),
+  ]);
+  return sortPlayers(players_1);
 }
