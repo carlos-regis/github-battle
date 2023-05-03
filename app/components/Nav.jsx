@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { sunIcon, moonIcon } from './icons';
 
-export default function Nav({ theme, toggleTheme }) {
+function Nav({ theme, toggleTheme }) {
     return (
         <nav className="split">
             <NavLink
@@ -52,3 +52,5 @@ Nav.propTypes = {
     theme: PropTypes.string.isRequired,
     toggleTheme: PropTypes.func.isRequired,
 };
+
+export default Nav;
