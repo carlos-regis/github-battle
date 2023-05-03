@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { element } from 'prop-types';
-import withHover from './WithHover';
+import withHover from './withHover';
 
 const container = {
     position: 'relative',
